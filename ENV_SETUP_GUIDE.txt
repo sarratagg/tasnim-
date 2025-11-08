@@ -1,0 +1,103 @@
+Environment Variables Setup Guide
+===================================
+
+This guide explains how to obtain and set up all required environment variables for the Portail Touristique Intelligent project.
+
+1. PORT (Default: 3000)
+----------------------
+- This is your local server port
+- Can be changed to any available port on your system
+- Default 3000 works fine for most cases
+- Make sure the port isn't being used by another application
+
+2. MONGO_URI
+------------
+Local MongoDB:
+- Install MongoDB Community Edition from: https://www.mongodb.com/try/download/community
+- Default URI: mongodb://localhost:27017/portail_touristique
+- No additional setup needed for local development
+
+Cloud MongoDB (Recommended for production):
+- Go to MongoDB Atlas: https://www.mongodb.com/cloud/atlas
+- Create a free account
+- Create a new cluster
+- Click "Connect" and choose "Connect your application"
+- Copy the connection string
+- Replace <password> with your database user password
+- Replace myFirstDatabase with portail_touristique
+
+3. JWT_SECRET
+------------
+- This is a secret key for JWT token encryption
+- Generate a strong random string (at least 32 characters)
+- You can generate one using this command in terminal:
+  Windows (PowerShell): 
+  ```
+  [Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+  ```
+  Unix/Linux/Mac:
+  ```
+  openssl rand -base64 32
+  ```
+- Never share or commit this secret
+
+4. OPENWEATHER_KEY
+-----------------
+- Go to OpenWeatherMap: https://openweathermap.org/
+- Sign up for a free account
+- Go to "API Keys" section in your account
+- Create a new API key or use the default one
+- Wait about 2 hours for the API key to activate
+- Free tier includes:
+  * 60 calls/minute
+  * Current weather data
+  * 3-hour forecast 5 days
+
+5. LIBRETRANSLATE_URL & KEY
+--------------------------
+Option 1 - Use Public LibreTranslate:
+- URL: https://libretranslate.com/translate
+- No key needed (but rate limited)
+
+Option 2 - Self-hosted LibreTranslate:
+- Install Docker
+- Run LibreTranslate locally:
+  ```
+  docker run -ti --rm -p 5000:5000 libretranslate/libretranslate
+  ```
+- URL would be: http://localhost:5000/translate
+- No key needed for local instance
+
+Option 3 - Commercial LibreTranslate API:
+- Go to https://libretranslate.com/api
+- Subscribe to get an API key
+- Use the provided URL and API key
+
+Final Steps
+-----------
+1. Copy .env.example to .env:
+   ```
+   copy .env.example .env
+   ```
+
+2. Replace the values in .env with your actual values:
+   ```
+   PORT=3000
+   MONGO_URI=your_mongodb_uri
+   JWT_SECRET=your_generated_secret
+   OPENWEATHER_KEY=your_openweather_api_key
+   LIBRETRANSLATE_URL=your_chosen_translate_url
+   LIBRETRANSLATE_KEY=your_translate_api_key
+   ```
+
+3. Never commit the .env file to version control
+   (it's already in .gitignore)
+
+Testing Your Configuration
+------------------------
+1. Start the server: npm run dev
+2. Check the console for successful:
+   - MongoDB connection
+   - Server start message
+3. Test endpoints using the Postman collection provided
+
